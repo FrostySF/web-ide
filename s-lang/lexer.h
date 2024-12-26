@@ -21,6 +21,9 @@ private:
     int parse_word(int offset);
     int check(int offset);
     bool check_end_word(int offset, bool is_first_letter);
+    int parse_string(int offset, char strsym);
+    int parse_int(int offset);
+    bool isdigit(int offset);
 };
 
 #endif // LEXER_H

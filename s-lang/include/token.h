@@ -10,13 +10,13 @@
     EOF
 };*/
 
-enum class TokenType {WORD, LBRACE, RBRACE};
-
-/*static const char *tokens[] = {
-    [LBRACE] = "{",
-    [RBRACE] = "}",
-    [EOF] = "\0"
-};*/
+enum class TokenType {
+    WORD,
+    STRING,
+    INT,
+    LBRACE,
+    RBRACE,
+};
 
 class Token
 {

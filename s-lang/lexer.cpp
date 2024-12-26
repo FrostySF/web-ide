@@ -15,7 +15,8 @@ Lexer::Lexer(std::string code)
     }
 }
 
-int Lexer::check(int offset) {
+int Lexer::check(int offset)
+{
     switch (code[offset]) {
     case ' ':
         {
@@ -35,16 +36,27 @@ int Lexer::check(int offset) {
             this->tokens.push_back(Token(TokenType::RBRACE, "}"));
             return 0;
         }
-    default:
+    case '\"':
         {
-            if (!check_end_word(offset, true))
-                return parse_word(offset) - 1;
-            return 0;
+            return parse_string(offset, '\"');
+        }
+    case '\'':
+        {
+            return parse_string(offset, '\'');
         }
     }
+
+    if (!check_end_word(offset, true))
+        return parse_word(offset) - 1;
+
+    if(isdigit(offset))
+        return parse_int(offset) - 1;
+
+    return 0;
 }
 
-bool Lexer::check_end_word(int offset, bool is_first_letter) {
+bool Lexer::check_end_word(int offset, bool is_first_letter)
+{
     std::string l = "qwertyuiopasdfghjklzxcvbnm1234567890_";
     if (is_first_letter)
         l = "qwertyuiopasdfghjklzxcvbnm_";
@@ -56,18 +68,76 @@ bool Lexer::check_end_word(int offset, bool is_first_letter) {
     return true;
 }
 
-int Lexer::parse_word(int offset) {
+bool Lexer::isdigit(int offset)
+{
+    std::string l = "1234567890";
+    for(const auto& it : l)
+    {
+        if(it == code[offset])
+            return true;
+    }
+    return false;
+}
+
+#define NEXT()  tmpoffset++; \
+                point = offset + tmpoffset;
+
+#define CURR_C() c = code[point];
+
+int Lexer::parse_word(int offset)
+{
     int tmpoffset = 0;
     char c = '\0';
     std::string tmp = "";
     int point = offset + tmpoffset;
-    while (!check_end_word(point, false) && point < code.size()) {
-        c = code[point];
+    while (point < code.size() && !check_end_word(point, false)) {
+        CURR_C()
         tmp += c;
-        tmpoffset++;
-        point = offset + tmpoffset;
+        NEXT()
     }
 
     this->tokens.push_back(Token(TokenType::WORD, tmp));
+    return tmpoffset;
+}
+
+int Lexer::parse_string(int offset, char strsym)
+{
+    int tmpoffset = 1;
+    int point = offset + tmpoffset;
+    char c = CURR_C()
+
+    std::string tmp = "";
+    while (point < code.size() && c != strsym) {
+        if (c == '\\') {
+            NEXT()
+            CURR_C()
+            tmp += c;
+            NEXT()
+            CURR_C()
+            continue;
+        }
+        tmp += c;
+        NEXT()
+        CURR_C()
+    }
+
+    this->tokens.push_back(Token(TokenType::STRING, tmp));
+    return tmpoffset;
+}
+
+
+int Lexer::parse_int(int offset)
+{
+    int tmpoffset = 0;
+    char c = '\0';
+    std::string tmp = "";
+    int point = offset + tmpoffset;
+    while (point < code.size() && isdigit(point)) {
+        CURR_C()
+        tmp += c;
+        NEXT()
+    }
+
+    this->tokens.push_back(Token(TokenType::INT, tmp));
     return tmpoffset;
 }

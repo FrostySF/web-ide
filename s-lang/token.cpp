@@ -20,5 +20,11 @@ std::string Token::tt_ts()
         return "RBRACE";
     case TokenType::WORD:
         return "WORD";
+    case TokenType::STRING:
+        return "STRING";
+    case TokenType::INT:
+        return "INT";
+    default:
+        return "NONE";
     }
 }
