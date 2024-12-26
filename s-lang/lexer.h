@@ -5,8 +5,30 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <map>
 
 #include "token.h"
+
+static std::map<std::string, TokenType> syms {
+    {"!", TokenType::NOT},
+    {"+", TokenType::PLUS},
+    {"-", TokenType::MINUS},
+    {"*", TokenType::STAR},
+    {"/", TokenType::DIV},
+    {">", TokenType::GT},
+    {"<", TokenType::LT},
+    {"%", TokenType::PERCENT},
+
+    {"+=", TokenType::PLUSEQ},
+    {"-=", TokenType::MINUSEQ},
+    {"*=", TokenType::STAREQ},
+    {"/=", TokenType::DIVEQ},
+    {">=", TokenType::GTEQ},
+    {"<=", TokenType::LTEQ},
+
+    {"==", TokenType::EQEQ},
+    {"!=", TokenType::NOTEQ}
+};
 
 class Lexer
 {
@@ -24,6 +46,7 @@ private:
     int parse_string(int offset, char strsym);
     int parse_int(int offset);
     bool isdigit(int offset);
+    bool issym(int offset);
 };
 
 #endif // LEXER_H

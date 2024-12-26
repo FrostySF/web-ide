@@ -3,18 +3,12 @@
 
 #include <string>
 
-/*enum class TokenType {
-    WORD,
-    LBRACE,
-    RBRACE,
-    EOF
-};*/
-
 enum class TokenType {
     WORD,
     STRING,
     INT,
 
+    PERCENT,
     PLUS,
     MINUS,
     STAR,
@@ -26,11 +20,12 @@ enum class TokenType {
 
     EQ,
     EQEQ,
-    NOTEQ,
     GT,
     LT,
     GTEQ,
     LTEQ,
+    NOT,
+    NOTEQ,
 
     LBRACE,
     RBRACE,

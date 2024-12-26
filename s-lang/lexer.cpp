@@ -15,21 +15,6 @@ Lexer::Lexer(std::string code)
     }
 }
 
-/*
-    PLUS,
-    MINUS,
-    STAR,
-    DIV,
-
-    EQ,
-    EQEQ,
-    NOTEQ,
-    GT,
-    LT,
-    GTEQ,
-    LTEQ,
-*/
-
 int Lexer::check(int offset)
 {
     switch (code[offset]) {
@@ -41,88 +26,6 @@ int Lexer::check(int offset)
         {
             return 0;
         }
-    case '{':
-        {
-            this->tokens.push_back(Token(TokenType::LBRACE, "{"));
-            return 0;
-        }
-    case '}':
-        {
-            this->tokens.push_back(Token(TokenType::RBRACE, "}"));
-            return 0;
-        }
-    case '+':
-        {
-            if (code[offset+1] == '=') {
-                this->tokens.push_back(Token(TokenType::PLUSEQ, "+="));
-                return 1;
-            }
-            this->tokens.push_back(Token(TokenType::PLUS, "+"));
-            return 0;
-        }
-    case '-':
-        {
-            if (code[offset+1] == '=') {
-                this->tokens.push_back(Token(TokenType::MINUSEQ, "-="));
-                return 1;
-            }
-            this->tokens.push_back(Token(TokenType::MINUS, "-"));
-            return 0;
-        }
-    case '*':
-        {
-            if (code[offset+1] == '=') {
-                this->tokens.push_back(Token(TokenType::STAREQ, "*="));
-                return 1;
-            }
-            this->tokens.push_back(Token(TokenType::STAR, "*"));
-            return 0;
-        }
-    case '/':
-        {
-            if (code[offset+1] == '=') {
-                this->tokens.push_back(Token(TokenType::DIVEQ, "/="));
-                return 1;
-            }
-            this->tokens.push_back(Token(TokenType::DIV, "/"));
-            return 0;
-        }
-    case '>':
-        {
-            if (code[offset+1] == '=') {
-                this->tokens.push_back(Token(TokenType::GTEQ, ">="));
-                return 1;
-            }
-            this->tokens.push_back(Token(TokenType::GT, ">"));
-            return 0;
-        }
-    case '<':
-        {
-            if (code[offset+1] == '=') {
-                this->tokens.push_back(Token(TokenType::LTEQ, "<="));
-                return 1;
-            }
-            this->tokens.push_back(Token(TokenType::LT, "<"));
-            return 0;
-        }
-    case '=':
-        {
-            if (code[offset+1] == '=') {
-                this->tokens.push_back(Token(TokenType::EQEQ, "=="));
-                return 1;
-            }
-            this->tokens.push_back(Token(TokenType::EQ, "="));
-            return 0;
-        }
-    case '!':
-        {
-            if (code[offset+1] == '=') {
-                this->tokens.push_back(Token(TokenType::NOTEQ, "!="));
-                return 1;
-            }
-            this->tokens.push_back(Token(TokenType::NOT, "!"));
-            return 0;
-        }
     case '\"':
         {
             return parse_string(offset, '\"');
@@ -131,6 +34,18 @@ int Lexer::check(int offset)
         {
             return parse_string(offset, '\'');
         }
+    }
+
+    if (issym(offset)) {
+        short r = 0;
+        std::string s = std::string();
+        s += code[offset];
+        if (code[offset+1] == '=') {
+            s += "=";
+            r = 1;
+        }
+        this->tokens.push_back(Token(syms[s], s));
+        return r;
     }
 
     if (!check_end_word(offset, true))
@@ -158,6 +73,17 @@ bool Lexer::check_end_word(int offset, bool is_first_letter)
 bool Lexer::isdigit(int offset)
 {
     std::string l = "1234567890";
+    for(const auto& it : l)
+    {
+        if(it == code[offset])
+            return true;
+    }
+    return false;
+}
+
+bool Lexer::issym(int offset)
+{
+    std::string l = "%{}+-*/><=\'\"";
     for(const auto& it : l)
     {
         if(it == code[offset])
