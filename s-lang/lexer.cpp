@@ -15,6 +15,21 @@ Lexer::Lexer(std::string code)
     }
 }
 
+/*
+    PLUS,
+    MINUS,
+    STAR,
+    DIV,
+
+    EQ,
+    EQEQ,
+    NOTEQ,
+    GT,
+    LT,
+    GTEQ,
+    LTEQ,
+*/
+
 int Lexer::check(int offset)
 {
     switch (code[offset]) {
@@ -34,6 +49,78 @@ int Lexer::check(int offset)
     case '}':
         {
             this->tokens.push_back(Token(TokenType::RBRACE, "}"));
+            return 0;
+        }
+    case '+':
+        {
+            if (code[offset+1] == '=') {
+                this->tokens.push_back(Token(TokenType::PLUSEQ, "+="));
+                return 1;
+            }
+            this->tokens.push_back(Token(TokenType::PLUS, "+"));
+            return 0;
+        }
+    case '-':
+        {
+            if (code[offset+1] == '=') {
+                this->tokens.push_back(Token(TokenType::MINUSEQ, "-="));
+                return 1;
+            }
+            this->tokens.push_back(Token(TokenType::MINUS, "-"));
+            return 0;
+        }
+    case '*':
+        {
+            if (code[offset+1] == '=') {
+                this->tokens.push_back(Token(TokenType::STAREQ, "*="));
+                return 1;
+            }
+            this->tokens.push_back(Token(TokenType::STAR, "*"));
+            return 0;
+        }
+    case '/':
+        {
+            if (code[offset+1] == '=') {
+                this->tokens.push_back(Token(TokenType::DIVEQ, "/="));
+                return 1;
+            }
+            this->tokens.push_back(Token(TokenType::DIV, "/"));
+            return 0;
+        }
+    case '>':
+        {
+            if (code[offset+1] == '=') {
+                this->tokens.push_back(Token(TokenType::GTEQ, ">="));
+                return 1;
+            }
+            this->tokens.push_back(Token(TokenType::GT, ">"));
+            return 0;
+        }
+    case '<':
+        {
+            if (code[offset+1] == '=') {
+                this->tokens.push_back(Token(TokenType::LTEQ, "<="));
+                return 1;
+            }
+            this->tokens.push_back(Token(TokenType::LT, "<"));
+            return 0;
+        }
+    case '=':
+        {
+            if (code[offset+1] == '=') {
+                this->tokens.push_back(Token(TokenType::EQEQ, "=="));
+                return 1;
+            }
+            this->tokens.push_back(Token(TokenType::EQ, "="));
+            return 0;
+        }
+    case '!':
+        {
+            if (code[offset+1] == '=') {
+                this->tokens.push_back(Token(TokenType::NOTEQ, "!="));
+                return 1;
+            }
+            this->tokens.push_back(Token(TokenType::NOT, "!"));
             return 0;
         }
     case '\"':

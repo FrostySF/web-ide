@@ -14,6 +14,26 @@ enum class TokenType {
     WORD,
     STRING,
     INT,
+
+    PLUS,
+    MINUS,
+    STAR,
+    DIV,
+    PLUSEQ,
+    MINUSEQ,
+    STAREQ,
+    DIVEQ,
+
+    EQ,
+    EQEQ,
+    NOTEQ,
+    GT,
+    LT,
+    GTEQ,
+    LTEQ,
+    NOT,
+    NOTEQ,
+
     LBRACE,
     RBRACE,
 };
