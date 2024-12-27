@@ -1,6 +1,7 @@
 #include "mainide.h"
 #include "ui_mainide.h"
 #include "lexer.h"
+#include "codegen.h"
 #include <iostream>
 
 MainIDE::MainIDE(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainIDE)
@@ -25,6 +26,10 @@ void MainIDE::on_build()
     for (Token &a : l.tokens) {
         std::cout << (int)a.tt << " - " << a.desc << std::endl;
     }
+    CodeGen cg = CodeGen();
+    cg.create_project();
+    cg.generate(l.tokens);
+    cg.build();
     std::cout << "\n\n";
 }
 

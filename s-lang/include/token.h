@@ -37,8 +37,6 @@ public:
     Token();
     Token(TokenType tt, std::string desc);
 
-    std::string tt_ts();
-
     TokenType tt;
     std::string desc;
 };

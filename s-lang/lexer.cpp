@@ -138,7 +138,6 @@ int Lexer::parse_string(int offset, char strsym)
     return tmpoffset;
 }
 
-
 int Lexer::parse_int(int offset)
 {
     int tmpoffset = 0;
