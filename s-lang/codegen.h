@@ -17,7 +17,8 @@ public:
     CodeGen();
     void create_project();
     void generate(std::vector<Token> tokens);
-    int parse_route(int offset);
+    int parse_body(int offset);
+    int parse_statement(int offset);
     void parse_function(std::string fname, int offset, std::vector<Token> args);
     std::string parse_function_args(std::vector<Token> args);
     void build();

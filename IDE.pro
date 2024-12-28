@@ -38,3 +38,12 @@ else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/s-lang/buil
 else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/s-lang/build/Default_Build_C_C-Release/release/s-lang.lib
 else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/s-lang/build/Default_Build_C_C-Release/debug/s-lang.lib
 else:unix: PRE_TARGETDEPS += $$PWD/s-lang/build/Default_Build_C_C-Release/libs-lang.a
+
+# Static
+QMAKE_LFLAGS += -static -static-libgcc
+QMAKE_LFLAGS_RELEASE += -static -static-libgcc
+QMAKE_CFLAGS_RELEASE -= -O2
+QMAKE_CFLAGS_RELEASE += -Os -momit-leaf-frame-pointer
+DEFINES += QT_STATIC_BUILD
+CONFIG += static
+# Static
