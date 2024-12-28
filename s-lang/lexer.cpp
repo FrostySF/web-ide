@@ -59,9 +59,9 @@ int Lexer::check(int offset)
 
 bool Lexer::check_end_word(int offset, bool is_first_letter)
 {
-    std::string l = "qwertyuiopasdfghjklzxcvbnm1234567890_";
+    std::string l = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890_";
     if (is_first_letter)
-        l = "qwertyuiopasdfghjklzxcvbnm_";
+        l = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM_";
     for(const auto& it : l)
     {
         if(it == code[offset])
@@ -83,7 +83,7 @@ bool Lexer::isdigit(int offset)
 
 bool Lexer::issym(int offset)
 {
-    std::string l = "%{}+-*/><=\'\"";
+    std::string l = "%{}()+-*/><=\'\"";
     for(const auto& it : l)
     {
         if(it == code[offset])
@@ -124,6 +124,7 @@ int Lexer::parse_string(int offset, char strsym)
         if (c == '\\') {
             NEXT()
             CURR_C()
+            tmp += '\\';
             tmp += c;
             NEXT()
             CURR_C()

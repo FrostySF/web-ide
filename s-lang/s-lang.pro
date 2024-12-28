@@ -13,13 +13,15 @@ SOURCES += \
     codegen.cpp \
     lexer.cpp \
     slang.cpp \
-    token.cpp
+    token.cpp \
+    utils.cpp
 
 HEADERS += \
     codegen.h \
     lexer.h \
     slang.h \
-    token.h
+    token.h \
+    utils.h
 
 # Default rules for deployment.
 unix {

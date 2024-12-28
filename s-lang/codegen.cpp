@@ -1,12 +1,9 @@
 #include "codegen.h"
-#include <fstream>
 
 CodeGen::CodeGen()
 {
 
 }
-
-std::string startupcode = "";
 
 void CodeGen::create_project()
 {
@@ -18,10 +15,9 @@ void CodeGen::create_project()
 
 void CodeGen::generate(std::vector<Token> tokens)
 {
-    //system("cd SLangApp");
-    std::ofstream fout("SLangApp/Program.cs", std::ios_base::app);
-    fout << "void HandleGET(string source, string path) {\n";
-    fout << "switch (source) {\n";
+    fout.open("SLangApp/Program.cs", std::ios_base::app);
+    fout << "void HandleGET(Socket clientSocket, string source, string path) {\n"
+         << "switch (source) {\n";
     this->tokens = tokens;
     for (size_t i = 0; i < tokens.size(); i++) {
         Token t = tokens[i];
@@ -31,17 +27,76 @@ void CodeGen::generate(std::vector<Token> tokens)
                 Token nt = tokens[i+1];
                 if (nt.tt == TokenType::STRING && t.desc == std::string("route")) {
                     fout << "case \"" << nt.desc << "\": {\n";
-                    fout << "break;\n}\n";
-                    i += 1;
+                    i += parse_route(i + 1);
                 }
             }
         }
     }
-    fout << "}\n}";
+    fout << "default:"
+         << "   clientSocket.Send(HttpKit.HttpRespError(\"404\", \"error\"));"
+         << "   break;"
+         << "}\n}";
     fout.close();
+}
+
+int CodeGen::parse_route(int offset)
+{
+    int tmpoffset = 1;
+    if (tokens[offset + 1].tt == TokenType::LBRACE) {
+        while (tokens[offset + tmpoffset].tt != TokenType::RBRACE) {
+            if (tokens[offset + tmpoffset].tt == TokenType::WORD && tokens[offset + tmpoffset + 1].tt == TokenType::LBRACEC) {
+                std::string fname = tokens[offset + tmpoffset].desc;
+                tmpoffset += 2;
+                std::vector<Token> args = std::vector<Token>();
+                while (tokens[offset + tmpoffset].tt != TokenType::RBRACEC) {
+                    args.push_back(tokens[offset + tmpoffset]);
+                    tmpoffset += 1;
+                }
+                parse_function(fname, tmpoffset, args);
+            }
+            tmpoffset += 1;
+        }
+    }
+    fout << "break;\n}\n";
+    return tmpoffset;
+}
+
+void CodeGen::parse_function(std::string fname, int offset, std::vector<Token> args) {
+    std::string build = parse_function_args(args);
+    if (fname == "log")
+    {
+        fout << "Console.WriteLine(" << build << ");\n";
+    }
+    else if (fname == "httpResp")
+    {
+        fout << "clientSocket.Send(HttpKit.HttpResp(" << build << "));\n";
+    }
+}
+
+std::string CodeGen::parse_function_args(std::vector<Token> args)
+{
+    std::string build = "";
+    for (int i = 0; i < args.size(); i++) {
+        Token t = args[i];
+        switch (t.tt) {
+        case TokenType::STRING:
+            {
+                build += "\"" + t.desc + "\"";
+                break;
+            }
+        default:
+            {
+                build += t.desc;
+                break;
+            }
+        }
+        if (i != args.size() - 1)
+            build += ",";
+    }
+    return build;
 }
 
 void CodeGen::build()
 {
-    system("cd SLangApp & dotnet build & cls & dotnet run");
+    utils::crossplatform_exec("@echo off\ncd SLangApp\ndotnet build\ncls\ndotnet run");
 }

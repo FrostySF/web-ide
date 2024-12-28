@@ -18,6 +18,10 @@ static std::map<std::string, TokenType> syms {
     {">", TokenType::GT},
     {"<", TokenType::LT},
     {"%", TokenType::PERCENT},
+    {"{", TokenType::LBRACE},
+    {"}", TokenType::RBRACE},
+    {"(", TokenType::LBRACEC},
+    {")", TokenType::RBRACEC},
 
     {"+=", TokenType::PLUSEQ},
     {"-=", TokenType::MINUSEQ},

@@ -29,6 +29,8 @@ enum class TokenType {
 
     LBRACE,
     RBRACE,
+    LBRACEC,
+    RBRACEC
 };
 
 class Token
