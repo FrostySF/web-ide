@@ -83,7 +83,7 @@ bool Lexer::isdigit(int offset)
 
 bool Lexer::issym(int offset)
 {
-    std::string l = "%{}()+-*/><=\'\"";
+    std::string l = ",.%{}()+-*/><=\'\"";
     for(const auto& it : l)
     {
         if(it == code[offset])

@@ -8,8 +8,10 @@
 #include <vector>
 #include <algorithm>
 #include <map>
-#include <future>
 #include <fstream>
+#include <filesystem>
+
+namespace fs = std::filesystem;
 
 class CodeGen
 {
@@ -19,6 +21,7 @@ public:
     void generate(std::vector<Token> tokens);
     int parse_body(int offset);
     int parse_statement(int offset);
+
     void parse_function(std::string fname, int offset, std::vector<Token> args);
     std::string parse_function_args(std::vector<Token> args);
     void build();
@@ -27,6 +30,10 @@ public:
 private:
     std::ofstream fout;
     std::vector<Token> tokens;
+
+    std::vector<std::string> listFiles(const std::string& path);
+    std::vector<std::string> split(std::string &s, char delim);
+    std::string modernize(Token t);
 };
 
 #endif // CODEGEN_H

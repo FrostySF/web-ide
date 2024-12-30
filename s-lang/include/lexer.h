@@ -22,6 +22,8 @@ static std::map<std::string, TokenType> syms {
     {"}", TokenType::RBRACE},
     {"(", TokenType::LBRACEC},
     {")", TokenType::RBRACEC},
+    {",", TokenType::COMMA},
+    {".", TokenType::DOT},
 
     {"+=", TokenType::PLUSEQ},
     {"-=", TokenType::MINUSEQ},
