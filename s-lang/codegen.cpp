@@ -125,10 +125,6 @@ int CodeGen::parse_statement(int offset) {
     }
 
     if (tokens[offset + tmpoffset].tt == TokenType::WORD && tokens[offset + tmpoffset + 1].tt == TokenType::EQ) {
-        /*
-        TODO
-        */
-
         std::string vname = tokens[offset + tmpoffset].desc;
         tmpoffset += 2;
         std::vector<Token> args = std::vector<Token>();
