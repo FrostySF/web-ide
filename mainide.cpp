@@ -22,7 +22,7 @@ std::string findKeyByValue(const std::map<std::string, TokenType>& map, const To
 void MainIDE::on_build()
 {
     //QPushButton *butt = (QPushButton*)sender();
-    Lexer l = Lexer(ui->plainTextEdit->toPlainText().toStdString());
+    Lexer l = Lexer(ui->codeEditor->toPlainText().toStdString());
     for (Token &a : l.tokens) {
         std::cout << (int)a.tt << " - " << a.desc << std::endl;
     }
