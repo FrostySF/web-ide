@@ -32,7 +32,8 @@ enum class TokenType {
     LBRACEC,
     RBRACEC,
     COMMA,
-    DOT
+    DOT,
+    SEMICOLON
 };
 
 class Token

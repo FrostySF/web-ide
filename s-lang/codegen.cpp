@@ -128,12 +128,22 @@ int CodeGen::parse_statement(int offset) {
         /*
         TODO
         */
+
+        std::string vname = tokens[offset + tmpoffset].desc;
+        tmpoffset += 2;
+        std::vector<Token> args = std::vector<Token>();
+        while (tokens[offset + tmpoffset].tt != TokenType::SEMICOLON) {
+            args.push_back(tokens[offset + tmpoffset]);
+            tmpoffset += 1;
+        }
+
+        fout << "var " << vname << " = " << parse_args(args, false) << ";\n";
     }
     return tmpoffset;
 }
 
 void CodeGen::parse_function(std::string fname, int offset, std::vector<Token> args) {
-    std::string build = parse_function_args(args);
+    std::string build = parse_args(args, true);
     if (fname == "log")
     {
         fout << "Console.WriteLine(" << build << ");\n";
@@ -170,7 +180,7 @@ std::string CodeGen::modernize(Token t)
     return build;
 }
 
-std::string CodeGen::parse_function_args(std::vector<Token> args)
+std::string CodeGen::parse_args(std::vector<Token> args, bool needColon)
 {
     std::string build = "";
     for (int i = 0; i < args.size(); i++) {
@@ -193,7 +203,7 @@ std::string CodeGen::parse_function_args(std::vector<Token> args)
                 break;
             }
         }
-        if (i != args.size() - 1)
+        if (needColon && i != args.size() - 1)
             build += ",";
     }
     return build;

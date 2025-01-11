@@ -23,7 +23,7 @@ public:
     int parse_statement(int offset);
 
     void parse_function(std::string fname, int offset, std::vector<Token> args);
-    std::string parse_function_args(std::vector<Token> args);
+    std::string parse_args(std::vector<Token> args, bool needColon);
     void build();
     std::string code;
 
